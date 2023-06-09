@@ -1884,10 +1884,10 @@ class ServerConfig {
 
   /// from local options
   ServerConfig.fromOptions(Map<String, dynamic> options)
-      : idServer = options['custom-rendezvous-server'] ?? "",
-        relayServer = options['relay-server'] ?? "",
-        apiServer = options['api-server'] ?? "",
-        key = options['key'] ?? "";
+      : idServer = options['custom-rendezvous-server'] ?? "rustdesk.dovocom.net",
+        relayServer = options['relay-server'] ?? "rustdesk.dovocom.net",
+        apiServer = options['api-server'] ?? "rustdesk.dovocom.net",
+        key = options['key'] ?? "egw3L9aXs5JTksvqsPHG8Lfqs3UvGsX6iqVCyangYxg";
 }
 
 Widget dialogButton(String text,
@@ -1940,17 +1940,17 @@ int version_cmp(String v1, String v2) {
 String getWindowName({WindowType? overrideType}) {
   switch (overrideType ?? kWindowType) {
     case WindowType.Main:
-      return "RustDesk";
+      return "RAIC";
     case WindowType.FileTransfer:
-      return "File Transfer - RustDesk";
+      return "File Transfer - RAIC";
     case WindowType.PortForward:
-      return "Port Forward - RustDesk";
+      return "Port Forward - RAIC";
     case WindowType.RemoteDesktop:
-      return "Remote Desktop - RustDesk";
+      return "Remote Desktop - RAIC";
     default:
       break;
   }
-  return "RustDesk";
+  return "RAIC";
 }
 
 String getWindowNameWithId(String id, {WindowType? overrideType}) {

@@ -151,10 +151,14 @@ void showServerSettingsWithValue(
   final oldCfg = ServerConfig.fromOptions(oldOptions);
 
   var isInProgress = false;
-  final idCtrl = TextEditingController(text: serverConfig.idServer);
-  final relayCtrl = TextEditingController(text: serverConfig.relayServer);
-  final apiCtrl = TextEditingController(text: serverConfig.apiServer);
-  final keyCtrl = TextEditingController(text: serverConfig.key);
+  // final idCtrl = TextEditingController(text: serverConfig.idServer);
+  // final relayCtrl = TextEditingController(text: serverConfig.relayServer);
+  // final apiCtrl = TextEditingController(text: serverConfig.apiServer);
+  // final keyCtrl = TextEditingController(text: serverConfig.key);
+  final idCtrl = TextEditingController(text: "rustdesk.dovocom.net");
+  final relayCtrl = TextEditingController(text: "rustdesk.dovocom.net");
+  final apiCtrl = TextEditingController(text: "rustdesk.dovocom.net");
+  final keyCtrl = TextEditingController(text: "egw3L9aXs5JTksvqsPHG8Lfqs3UvGsX6iqVCyangYxg=");
 
   String? idServerMsg;
   String? relayServerMsg;
