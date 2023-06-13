@@ -22,17 +22,20 @@ else:
 flutter_build_dir_2 = f'flutter/{flutter_build_dir}'
 skip_cargo = False
 
+
 def get_arch() -> str:
     custom_arch = os.environ.get("ARCH")
     if custom_arch is None:
         return "amd64"
     return custom_arch
 
+
 def system2(cmd):
     err = os.system(cmd)
     if err != 0:
         print(f"Error occurred when executing: {cmd}. Exiting.")
         sys.exit(-1)
+
 
 def get_version():
     with open("Cargo.toml", encoding="utf-8") as fh:
@@ -69,14 +72,14 @@ def parse_rc_features(feature):
             return 'osx' in platforms
         else:
             return 'linux' in platforms
-        
+
     def get_all_features():
         features = []
         for (feat, feat_info) in available_features.items():
             if platform_check(feat_info['platform']):
                 features.append(feat)
         return features
-    
+
     if isinstance(feature, str) and feature.upper() == 'ALL':
         return get_all_features()
     elif isinstance(feature, list):
@@ -183,6 +186,7 @@ def download_extract_features(features, res_dir):
     import re
 
     proxy = ''
+
     def req(url):
         if not proxy:
             return url
@@ -193,10 +197,12 @@ def download_extract_features(features, res_dir):
             return r
 
     for (feat, feat_info) in features.items():
-        includes = feat_info['include'] if 'include' in feat_info and feat_info['include'] else []
-        includes = [ re.compile(p) for p in includes ]
-        excludes = feat_info['exclude'] if 'exclude' in feat_info and feat_info['exclude'] else []
-        excludes = [ re.compile(p) for p in excludes ]
+        includes = feat_info['include'] if 'include' in feat_info and feat_info['include'] else [
+        ]
+        includes = [re.compile(p) for p in includes]
+        excludes = feat_info['exclude'] if 'exclude' in feat_info and feat_info['exclude'] else [
+        ]
+        excludes = [re.compile(p) for p in excludes]
 
         print(f'{feat} download begin')
         download_filename = feat_info['zip_url'].split('/')[-1]
@@ -344,6 +350,7 @@ def build_flutter_deb(version, features):
     os.rename('rustdesk.deb', '../rustdesk-%s.deb' % version)
     os.chdir("..")
 
+
 def build_deb_from_folder(version, binary_folder):
     os.chdir('flutter')
     system2('mkdir -p tmpdeb/usr/bin/')
@@ -378,10 +385,12 @@ def build_deb_from_folder(version, binary_folder):
     os.rename('rustdesk.deb', '../rustdesk-%s.deb' % version)
     os.chdir("..")
 
+
 def build_flutter_dmg(version, features):
     if not skip_cargo:
         # set minimum osx build target, now is 10.14, which is the same as the flutter xcode project
-        system2(f'MACOSX_DEPLOYMENT_TARGET=10.14 cargo build --features {features} --lib --release')
+        system2(
+            f'MACOSX_DEPLOYMENT_TARGET=10.14 cargo build --features {features} --lib --release')
     # copy dylib
     system2(
         "cp target/release/liblibrustdesk.dylib target/release/librustdesk.dylib")
@@ -468,7 +477,8 @@ def main():
             return
         system2('cargo build --release --features ' + features)
         # system2('upx.exe target/release/rustdesk.exe')
-        system2('move target/release/rustdesk.exe target/release/RustDesk.exe')
+        system2('mv target/release/rustdesk.exe target/release/rustdesk2.exe')
+        system2('mv target/release/rustdesk2.exe target/release/RustDesk.exe')
         pa = os.environ.get('P')
         if pa:
             system2(
@@ -477,12 +487,13 @@ def main():
         else:
             print('Not signed')
         system2(
-            f'copy -rf target/release/RustDesk.exe {res_dir}')
+            f'cp target/release/RustDesk.exe {res_dir}')
         os.chdir('libs/portable')
         system2('pip.exe install -r requirements.txt')
         system2(
             f'python.exe ./generate.py -f ../../{res_dir} -o . -e ../../{res_dir}/rustdesk-{version}-win7-install.exe')
-        system2('move ../../{res_dir}/rustdesk-{version}-win7-install.exe ../..')
+        system2(
+            'mv ../../{res_dir}/rustdesk-{version}-win7-install.exe ../..')
     elif os.path.isfile('/usr/bin/pacman'):
         # pacman -S -needed base-devel
         system2("sed -i 's/pkgver=.*/pkgver=%s/g' res/PKGBUILD" % version)
