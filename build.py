@@ -468,17 +468,19 @@ def main():
     external_resources(flutter, args, res_dir)
     if windows:
         # build virtual display dynamic library
-        os.chdir('libs/virtual_display/dylib')
+        os.chdir('.\\libs\\virtual_display\\dylib')
         system2('cargo build --release')
-        os.chdir('../../..')
+        os.chdir('..\\..\\..')
 
         if flutter:
             build_flutter_windows(version, features)
             return
         system2('cargo build --release --features ' + features)
         # system2('upx.exe target/release/rustdesk.exe')
-        system2('mv target/release/rustdesk.exe target/release/rustdesk2.exe')
-        system2('mv target/release/rustdesk2.exe target/release/RustDesk.exe')
+        system2(
+            'MOVE .\\target\\release\\rustdesk.exe .\\target\\release\\rustdesk2.exe')
+        system2(
+            'MOVE .\\target\\release\\rustdesk2.exe .\\target\\release\\RustDesk.exe')
         pa = os.environ.get('P')
         if pa:
             system2(
@@ -487,13 +489,13 @@ def main():
         else:
             print('Not signed')
         system2(
-            f'cp target/release/RustDesk.exe {res_dir}')
-        os.chdir('libs/portable')
+            f'COPY .\\target\\release\\RustDesk.exe {res_dir}')
+        os.chdir('libs\\portable')
         system2('pip.exe install -r requirements.txt')
         system2(
-            f'python.exe ./generate.py -f ../../{res_dir} -o . -e ../../{res_dir}/rustdesk-{version}-win7-install.exe')
+            f'python.exe .\\generate.py -f ..\\..\\{res_dir} -o . -e ..\\..\\{res_dir}\\rustdesk-{version}-win7-install.exe')
         system2(
-            'mv ../../{res_dir}/rustdesk-{version}-win7-install.exe ../..')
+            f'MOVE ..\\..\\{res_dir}\\rustdesk-{version}-win7-install.exe ..\\..')
     elif os.path.isfile('/usr/bin/pacman'):
         # pacman -S -needed base-devel
         system2("sed -i 's/pkgver=.*/pkgver=%s/g' res/PKGBUILD" % version)
